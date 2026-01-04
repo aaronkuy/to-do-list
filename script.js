@@ -3,7 +3,7 @@ const todoForm = document.querySelector('form');
 const todoInput = document.getElementById('write-input');
 const todoListUL = document.getElementById('list');
 
-//Allocate the function getTodos to let allTodos due the list changes
+//Allocat the local storage array to 'let allTodos' because the list changes
 //when the user deletes or rewrite new entries, then update our list 
 let allTodos = getTodos();
 updateTodoList();
@@ -59,7 +59,7 @@ function createTodoItem(todo, todoIndex){
     const todoText = todo.text;
 //Li gets the class name "to-do" in order to style it with CSS 
     todoLI.className = "to-do";
-//Backtick to also implement variables in it
+//Backtick to also implement variables in it, our HTML element of the entry 
     todoLI.innerHTML = `
          <input type="checkbox" id="${todoId}">
          <label class="custom-checkbox" for="${todoId}">
