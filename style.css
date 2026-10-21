@@ -1,161 +1,229 @@
 :root {
-    --background: #121111;
-    --primary-color: #272733;
-    --secondary-color: #514e59;
-    --accent-color: #D4E01F;
-    --text-color: #f8eded;
+    --bg: #f4f5f9;
+    --card: #ffffff;
+    --ink: #14161c;
+    --muted: #6b7280;
+    --line: #e4e6ee;
+    --accent: #4f46e5;
+    --accent-hover: #4338ca;
+    --accent-soft: #eef0ff;
+    --danger: #e5484d;
+    --danger-soft: #fff1f1;
+    --radius: 14px;
+    --shadow: 0 1px 2px rgba(20, 22, 28, 0.04), 0 8px 24px rgba(20, 22, 28, 0.06);
 }
 
 * {
-    margin: 0;
-    padding: 0;
-}
-
-html {
-    font-family: "ui-sans-serif";
-    font-size: 16pt;
-    color: var(--text-color);
+    box-sizing: border-box;
 }
 
 body {
+    margin: 0;
     min-height: 100vh;
-    padding: 10px;
-    background-color: var(--background);
     display: flex;
     flex-direction: column;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    line-height: 1.5;
+    color: var(--ink);
+    background:
+        radial-gradient(1100px 480px at 50% -140px, #e4e6ff 0%, rgba(228, 230, 255, 0) 70%),
+        var(--bg);
+}
+
+button {
+    font: inherit;
+}
+
+.footer {
+    margin-top: auto;
+    padding: 24px 20px 32px;
+    text-align: center;
+    font-size: 0.85rem;
+    color: var(--muted);
+}
+
+.footer a {
+    color: inherit;
+    text-underline-offset: 3px;
+}
+
+.footer a:hover {
+    color: var(--ink);
+}
+
+body {
     align-items: center;
+    padding: 0 20px;
 }
 
 h1 {
-    margin-top: 100px;
-    margin-bottom: 20px;
-    font-size: 2rem;
-    font-weight: 800;
-    text-transform: uppercase;
+    margin: 64px 0 24px;
+    font-size: clamp(2rem, 4vw, 2.7rem);
+    line-height: 1.1;
+    letter-spacing: -0.025em;
     text-align: center;
-    color: var(--accent-color);
 }
 
 .wrapper {
-    width: 700px;
-    max-width: 100%;
+    width: min(100%, 640px);
+}
+
+/* Input */
+
+form {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 20px;
+    padding: 6px;
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    box-shadow: var(--shadow);
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+form:focus-within {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.14), var(--shadow);
+}
+
+#write-input {
+    flex: 1;
+    min-width: 0;
+    padding: 10px 16px;
+    border: 0;
+    outline: 0;
+    background: transparent;
+    font: inherit;
+    font-size: 1rem;
+    color: var(--ink);
+}
+
+#write-input::placeholder {
+    color: #9aa0ad;
+}
+
+#add-btn {
+    padding: 10px 26px;
+    border: 0;
+    border-radius: 999px;
+    background: var(--accent);
+    color: #ffffff;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    cursor: pointer;
+    transition: background 0.15s ease, transform 0.08s ease;
+}
+
+#add-btn:hover {
+    background: var(--accent-hover);
+}
+
+#add-btn:active {
+    transform: scale(0.97);
+}
+
+/* List */
+
+#list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
     display: flex;
     flex-direction: column;
     gap: 10px;
 }
 
-#write-input {
-    box-sizing: border-box;
-    padding: 12px 20px;
-    width: 100%;
-    background: none;
-    border: 2px solid var(--secondary-color);
-    border-radius: 1000px;
-    font: inherit;
-    color: var(--text-color);
-    caret-color: var(--accent-color);
-}
-
-#write-input:focus {
-    outline: none;
-}
-
-#add-btn {
-    position: absolute;
-    top: 0;
-    right: 0;
-    background: var(--accent-color);
-    height: 100%;
-    border-radius: 1000px;
-    font: inherit;
-    font-weight: 600;
-    color: var(--background);
-    padding: 0 30px;
-    cursor: pointer;
-}
-
-form {
-    position: relative;
-}
-
 .to-do {
-    margin-bottom: 10px;
-    padding: 0 16px;
-    background: var(--primary-color);
-    border-radius: 15px;
     display: flex;
     align-items: center;
+    gap: 12px;
+    padding: 12px 12px 12px 16px;
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
 }
 
-.to-do .to-do-text {
-    padding: 15px;
-    padding-right: 0;
-    flex-grow: 1;
-}
-
-.delete-btn {
-    padding: 3px;
-    background: none;
-    border: none;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-}
-
-.delete-btn:hover svg {
-    fill: #ff0033;
-}
-
-.delete-btn svg {
-    transition: 180ms ease;
+.to-do input[type="checkbox"] {
+    display: none;
 }
 
 .custom-checkbox {
-    border: 2px solid var(--accent-color);
-    border-radius: 50%;
-    min-height: 20px;
-    min-width: 20px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    width: 22px;
+    height: 22px;
     flex-shrink: 0;
-    transition: 180ms ease;
+    display: grid;
+    place-items: center;
+    border: 2px solid #c7cbe0;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.custom-checkbox svg {
+    width: 16px;
+    height: 16px;
+    fill: transparent;
+}
+
+.to-do-text {
+    flex: 1;
+    padding: 2px 0;
+    word-break: break-word;
     cursor: pointer;
 }
 
 input[type="checkbox"]:checked ~ .custom-checkbox {
-    background-color: var(--accent-color);
+    background: var(--accent);
+    border-color: var(--accent);
 }
 
 input[type="checkbox"]:checked ~ .custom-checkbox svg {
-    fill: var(--primary-color);
+    fill: #ffffff;
 }
 
 input[type="checkbox"]:checked ~ .to-do-text {
+    color: var(--muted);
     text-decoration: line-through;
-    color: var(--secondary-color);
 }
 
-input[type="checkbox"] {
-    display: none;
+.delete-btn {
+    display: flex;
+    padding: 6px;
+    border: 0;
+    border-radius: 8px;
+    background: none;
+    cursor: pointer;
+    transition: background 0.15s ease;
+}
+
+.delete-btn svg {
+    width: 20px;
+    height: 20px;
+    fill: #9aa0ad;
+    transition: fill 0.15s ease;
+}
+
+.delete-btn:hover {
+    background: var(--danger-soft);
+}
+
+.delete-btn:hover svg {
+    fill: var(--danger);
 }
 
 @media (max-width: 500px) {
-    html {
-        font-size: 12pt;
+    h1 {
+        margin-top: 40px;
+    }
+
+    form {
+        flex-wrap: wrap;
+        border-radius: 18px;
     }
 
     #add-btn {
-        position: unset;
         width: 100%;
-        margin-top: 10px;
-        padding: 15px;
-        height: auto;
-    }
-
-    h1 {
-        margin-top: 50px;
-        font-size: 15vw;
     }
 }
