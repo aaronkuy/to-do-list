@@ -1,34 +1,46 @@
-# To do list App
+# To-do List
 
-## Description 
-A very practical tool for the user to write down tasks for the day or other information which is important. 
-The user also has the opportunity to checkmark already done tasks and also to delete them. Per local host 
-the user's entered information persist even when refreshing the website.
+A to-do list in the browser: add tasks, check them off and delete them; the list survives a reload.
 
-## Features 
-- Interactive websites which is responsive to the user's input
-- Local host implementation to save information
-- Clean UI
-- And also adaptive on smartphone devices
+![Screenshot of To-do List](docs/screenshot.png)
 
-## Tech Stack
-- HTML
-- Java Script
-- CSS
-- Local Host 
+## Features
 
-## The things I've learned
-- I learned how to adjust the CSS/ HTML formatation, when the user querys the website with a smaller device 
-- I solidified basic css html design structure and used new features like LI 
-- On how to debug very stern code, which requires a good overview
+- Add tasks with the button or Enter
+- Check off and delete tasks
+- Tasks and their state persist in `localStorage`
+- Works on phone screens
 
-<img width="1470" height="832" alt="Screenshot 2026-01-02 at 23 36 13" src="https://github.com/user-attachments/assets/e402503a-dd3d-41a7-a863-b47c7dab9dc0" />
+## Tech
 
-<img width="1467" height="826" alt="Screenshot 2026-01-02 at 23 36 48" src="https://github.com/user-attachments/assets/143a52c1-1988-40fc-975d-abf385ac11bb" />
+- HTML, CSS, vanilla JavaScript
+- `localStorage` for persistence
+- Material Symbols icons as inline SVG
 
+## How to run
 
-<img width="1470" height="825" alt="Screenshot 2026-01-02 at 23 37 03" src="https://github.com/user-attachments/assets/7cb70493-5b84-44da-af2c-05e1f6729b61" />
+Open the live version: **[aaronkuy.github.io/to-do-list](https://aaronkuy.github.io/to-do-list/)**
 
+Or run it locally. There is no build step and no dependency:
 
-<img width="1470" height="828" alt="Screenshot 2026-01-02 at 23 37 15" src="https://github.com/user-attachments/assets/640e33be-40a5-4f0d-8711-42421e90a286" />
+```bash
+git clone https://github.com/aaronkuy/to-do-list.git
+cd to-do-list
+open index.html        # macOS; on Linux use xdg-open, on Windows start
+```
 
+## What I learned
+
+- Rendering a list from an array and keeping it in sync with storage
+- Preventing the default form submit
+- Responsive CSS for small screens
+
+## What I'd do next
+
+- Edit a task in place
+- Filter by open and done
+- Build list items with DOM methods instead of `innerHTML`
+
+## License
+
+See [LICENSE](LICENSE).
