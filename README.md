@@ -2,7 +2,7 @@
 
 A to-do list in the browser: add tasks, check them off and delete them; the list survives a reload.
 
-![Screenshot of To-do List with three tasks, one of them checked off](docs/screenshot.png)
+![Screenshot of To-do List with three tasks, one of them checked off](docs/to-do-list.png)
 
 ## Features
 
@@ -43,7 +43,10 @@ open index.html        # macOS; on Linux use xdg-open, on Windows start
 node --test        # or: npm test
 ```
 
-Ten tests cover `storage.js` (loading, validation, the key carry-over, blocked storage). They need Node.js 20 or newer and nothing else. The rendering and keyboard behaviour in `script.js` has no automated test.
+- `test/storage.test.js` (10 tests) covers `storage.js`: loading, validation, the key carry-over and blocked storage.
+- `test/page-load.test.js` (3 tests) runs `storage.js` and `script.js` together against a small stand-in for the DOM and checks that opening the page shows the stored tasks without rewriting them, also after the key carry-over and with unreadable data.
+
+The tests need Node.js 20 or newer and nothing else. Keyboard use, focus and the layout are not covered by automated tests.
 
 ## Limitations
 
