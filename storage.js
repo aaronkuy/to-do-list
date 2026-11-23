@@ -9,8 +9,9 @@ const STORAGE_KEY = 'to-do-list:todos';
 // Key used before the namespace was added. Read once, then removed.
 const LEGACY_STORAGE_KEY = 'todos';
 
-// A function declaration on purpose: script.js loads the list while the
-// scripts are still being evaluated, and declarations are hoisted.
+// A function declaration rather than a const arrow function, so it exists
+// before any line of this file runs. A const defined below its first use
+// would throw (temporal dead zone) and every stored task would be dropped.
 function isTodo(value) {
     return (
         value !== null &&

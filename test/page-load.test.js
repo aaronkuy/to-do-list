@@ -60,7 +60,7 @@ class FakeElement {
         }
     }
 
-    // Supports the three selector forms script.js uses: tag, .class, tag list.
+    // Supports the two selector forms script.js uses: a tag name and .class.
     querySelectorAll(selector) {
         return [...this.descendants()].filter((element) =>
             selector.startsWith('.')
