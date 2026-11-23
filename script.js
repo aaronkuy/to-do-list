@@ -1,6 +1,7 @@
 const todoForm = document.querySelector('form');
 const todoInput = document.getElementById('write-input');
 const todoListUL = document.getElementById('list');
+const todoTemplate = document.getElementById('todo-template');
 
 // In-memory state. Reassigned in deleteTodoItem(), hence `let`.
 let allTodos = getTodos();
@@ -29,9 +30,9 @@ function addTodo() {
     }
 
     function updateTodoList(){
-    todoListUL.innerHTML = '';
+    todoListUL.replaceChildren();
     allTodos.forEach((todo, todoIndex)=>{
-        todoItem = createTodoItem(todo, todoIndex);
+        const todoItem = createTodoItem(todo, todoIndex);
         todoListUL.append(todoItem);
     })
 }
@@ -41,39 +42,26 @@ function addTodo() {
 function createTodoItem(todo, todoIndex){
     // The id links both labels to the checkbox.
     const todoId = "todo-"+todoIndex;
-    const todoLI =document.createElement('li');
-    const todoText = todo.text;
-    todoLI.className = "to-do";
-    todoLI.innerHTML = `
-         <input type="checkbox" id="${todoId}">
-         <label class="custom-checkbox" for="${todoId}">
-              <svg fill="transparent" xmlns="http://www.w3.org/2000/svg" height="24px"
-                     viewBox="0 -960 960 960"
-                     width="24px"
-                    fill="#e3e3e3"><path d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z"/>
-               </svg>
-         </label>
-         <label for="${todoId}" class="to-do-text">
-               ${todoText}
-         </label>
-         <button class="delete-btn">
-             <svg fill="var(--secondary-color)"
-              xmlns="http://www.w3.org/2000/svg" height="24px" 
-              viewBox="0 -960 960 960" width="24px" fill="#e3e3e3">
-              <path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z"/>
-              </svg>
-         </button>
-        `
+    const todoLI = todoTemplate.content.firstElementChild.cloneNode(true);
+    const checkbox = todoLI.querySelector("input");
+    checkbox.id = todoId;
+    checkbox.checked = todo.completed;
+    todoLI.querySelectorAll("label").forEach((label)=>{
+        label.htmlFor = todoId;
+    });
+    // textContent, not innerHTML: the text is user input and must stay text.
+    todoLI.querySelector(".to-do-text").textContent = todo.text;
+
     const deleteButton = todoLI.querySelector(".delete-btn");
+    // The button shows only an icon, so it needs a name for screen readers.
+    deleteButton.setAttribute("aria-label", `Delete "${todo.text}"`);
     deleteButton.addEventListener('click', ()=>{
         deleteTodoItem(todoIndex);
     })
-    const checkbox = todoLI.querySelector("input");
     checkbox.addEventListener('change', ()=>{
         allTodos[todoIndex].completed = checkbox.checked;
         saveTodos();
     })
-    checkbox.checked = todo.completed;
     return todoLI;
 }
 
