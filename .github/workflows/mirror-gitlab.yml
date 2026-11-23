@@ -1,0 +1,60 @@
+name: Mirror to GitLab
+
+# Keeps https://gitlab.com/aaronkuyucu/to-do-list in sync with this repository.
+# GitLab Free has no pull mirroring, so GitHub pushes over a GitLab deploy key
+# with write access. GitLab is a read-only copy; work happens here.
+on:
+  push:
+    branches: ["**"]
+    tags: ["**"]
+  delete:
+  # Hourly run also catches branches that do not contain this file.
+  schedule:
+    - cron: "17 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# One mirror run at a time; a newer run waits instead of racing an older one.
+concurrency:
+  group: mirror-gitlab
+  cancel-in-progress: false
+
+jobs:
+  mirror:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      GITLAB_REPO: git@gitlab.com:aaronkuyucu/to-do-list.git
+    steps:
+      - name: Clone all refs from GitHub
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          git clone --mirror \
+            "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" repo.git
+          # Pull request refs are GitHub-only and must not be pushed.
+          git -C repo.git for-each-ref --format='delete %(refname)' refs/pull \
+            | git -C repo.git update-ref --stdin
+
+      - name: Set up SSH for GitLab
+        env:
+          GITLAB_MIRROR_KEY: ${{ secrets.GITLAB_MIRROR_KEY }}
+        run: |
+          install -d -m 700 ~/.ssh
+          printf '%s\n' "$GITLAB_MIRROR_KEY" > ~/.ssh/gitlab_mirror
+          chmod 600 ~/.ssh/gitlab_mirror
+          ssh-keyscan -t ed25519 gitlab.com > ~/.ssh/known_hosts 2>/dev/null
+          test -s ~/.ssh/known_hosts
+
+      - name: Push branches and tags to GitLab
+        env:
+          GIT_SSH_COMMAND: ssh -i ~/.ssh/gitlab_mirror -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes
+        run: |
+          git -C repo.git push --prune "$GITLAB_REPO" \
+            '+refs/heads/*:refs/heads/*' '+refs/tags/*:refs/tags/*'
+
+      - name: Remove key
+        if: always()
+        run: rm -f ~/.ssh/gitlab_mirror
