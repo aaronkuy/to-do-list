@@ -11,7 +11,8 @@ const todoTemplate = document.getElementById('todo-template');
 let allTodos = [];
 let nextId = 1;
 
-// Handle submit (button or Enter) without the default page reload.
+// Listeners first: if loading below fails for any reason, the form must
+// still not reload the page.
 todoForm.addEventListener('submit', (event) => {
     event.preventDefault();
     addTodo();
@@ -23,7 +24,7 @@ todoListUL.addEventListener('change', (event) => {
     const todo = findTodo(event.target.closest('.to-do'));
     if (!todo) return;
     todo.completed = event.target.checked;
-    saveTodos();
+    saveTodos(getStorage(), allTodos);
 });
 
 todoListUL.addEventListener('click', (event) => {
@@ -31,8 +32,18 @@ todoListUL.addEventListener('click', (event) => {
     if (deleteButton) deleteTodoItem(deleteButton.closest('.to-do'));
 });
 
-allTodos = getTodos().map(withId);
+allTodos = loadTodos(getStorage()).map(withId);
 todoListUL.replaceChildren(...allTodos.map(createTodoItem));
+
+// Reading window.localStorage itself throws when the browser blocks storage.
+// loadTodos() and saveTodos() handle the missing storage.
+function getStorage() {
+    try {
+        return window.localStorage;
+    } catch {
+        return null;
+    }
+}
 
 function withId(todo) {
     return { id: String(nextId++), text: todo.text, completed: todo.completed };
@@ -50,7 +61,7 @@ function addTodo() {
     const todo = withId({ text: todoText, completed: false });
     allTodos.push(todo);
     todoListUL.append(createTodoItem(todo));
-    saveTodos();
+    saveTodos(getStorage(), allTodos);
 
     todoInput.value = '';
     // After a click on "ADD" the focus sits on the button; move it back so
@@ -90,20 +101,6 @@ function deleteTodoItem(todoLI) {
 
     allTodos = allTodos.filter((todo) => todo.id !== todoLI.dataset.id);
     todoLI.remove();
-    saveTodos();
+    saveTodos(getStorage(), allTodos);
     focusTarget.focus();
-}
-
-// localStorage stores strings only, hence JSON. The ids are not stored.
-function saveTodos() {
-    const plain = allTodos.map((todo) => ({
-        text: todo.text,
-        completed: todo.completed,
-    }));
-    localStorage.setItem('todos', JSON.stringify(plain));
-}
-
-function getTodos() {
-    const todos = localStorage.getItem('todos') || '[]';
-    return JSON.parse(todos);
 }
