@@ -41,6 +41,11 @@ open index.html        # macOS; on Linux use xdg-open, on Windows start
 - Filter by open and done
 - Build list items with DOM methods instead of `innerHTML`
 
+## Credits
+
+- The first version of `script.js` (one array as state, a list rendered from it, save and load through `localStorage`) started from a to-do list tutorial. The link to that tutorial is not recorded in this repository yet.
+- Icons: "check" and "delete" from [Material Symbols](https://fonts.google.com/icons) by Google, embedded as inline SVG and licensed under the [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0).
+
 ## License
 
-See [LICENSE](LICENSE).
+MIT, see [LICENSE](LICENSE). It covers what this repository adds; the tutorial approach and the icons remain under the terms of their sources (see Credits).
