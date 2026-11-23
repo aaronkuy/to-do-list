@@ -45,8 +45,10 @@ jobs:
           install -d -m 700 ~/.ssh
           printf '%s\n' "$GITLAB_MIRROR_KEY" > ~/.ssh/gitlab_mirror
           chmod 600 ~/.ssh/gitlab_mirror
-          ssh-keyscan -t ed25519 gitlab.com > ~/.ssh/known_hosts 2>/dev/null
-          test -s ~/.ssh/known_hosts
+          # GitLab's published ED25519 host key, pinned instead of trusting
+          # ssh-keyscan at run time (SHA256:eUXGGm1YGsMAS7vkcx6JOJdOGHPem5gQp4taiCfCLB8).
+          # Source: https://docs.gitlab.com/user/gitlab_com/#ssh-known_hosts-entries
+          echo 'gitlab.com ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAfuCHKVTjquxvt6CM6tdG4SLp1Btn/nOeHHE5UOzRdf' > ~/.ssh/known_hosts
 
       - name: Push branches and tags to GitLab
         env:
